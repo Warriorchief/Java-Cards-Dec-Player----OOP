@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script type="text/javascript">
+    function Card(suit,number){
+      this.suit=suit;
+      this.number=number;
+    }
+    function Deck(){
+      suits=["spades","diamonds","hearts","clubs"]
+      numbers=["Ace","deuce","three","four","five","six","seven","eight","nine","ten","Jack","Queen","King"];
+      this.contents=[];
+      for (var i=0;i<13;i++){
+        for (var j=0;j<4;j++){
+          this.contents.push(new Card(suits[j],numbers[i]));
+        }
+      }
+    }
+
+    Deck.prototype.shuffle=function(){
+      for (var i=0;i<52;i++){
+        var rand=Math.floor(Math.random()*52);
+        var holder=this.contents[i];
+        this.contents[i]=this.contents[rand];
+        this.contents[rand]=holder;
+      }
+      return this;
+    }
+
+    Deck.prototype.deal=function(){
+      var rand=Math.floor(Math.random()*this.contents.length);
+      var selected=this.contents.splice(rand,1);
+      return selected[0];
+    }
+
+    function Player(name){
+      this.name=name;
+      this.hand=[]
+    }
+
+    Player.prototype.take=function(some_deck){
+      this.hand.push(some_deck.deal());
+    }
+
+    Player.prototype.discard=function(){
+      this.hand=[];
+      //could also start a new deck if you need to//
+    }
+
+    my_deck=new Deck();
+    my_deck.shuffle();
+    console.log("the shuffled deck has length",my_deck.contents.length,";its first five cards are",my_deck.contents[0],my_deck.contents[1],my_deck.contents[2],my_deck.contents[3],my_deck.contents[4]);
+    Chris=new Player("Chris");
+    Chris.take(my_deck);
+    Chris.take(my_deck);
+    Chris.take(my_deck);
+    Chris.take(my_deck);
+    Chris.take(my_deck);
+    for (var c=0;c<Chris.hand.length;c++){
+      console.log("Chris has the",Chris.hand[c])
+    }
+    console.log("the deck now has length",my_deck.contents.length)
+    Chris.discard();
+    console.log("Chris just discarded so his hand now has size",Chris.hand.length);
+    
+    </script>
+  </body>
+</html>
